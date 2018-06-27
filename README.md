@@ -1,2 +1,2 @@
-# biolib
+# BioLib
 A C++ library for bioinformatics
