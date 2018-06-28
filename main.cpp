@@ -1,5 +1,5 @@
+#include <biolib>
 #include <pythonize>
-#include "biolib.hpp"
 
 int main() // Testing
 {
