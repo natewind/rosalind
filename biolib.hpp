@@ -14,10 +14,10 @@ namespace bio
 	//========================== Utilities: ===================================
 
 	template <typename T, typename U>
-	constexpr bool contains(const T &self, U value)
+	constexpr bool contains(const T &range, U value)
 	{
 		using std::begin, std::end;
-		return std::find(begin(self), end(self), value) != end(self);
+		return std::find(begin(range), end(range), value) != end(range);
 	}
 
 	template <typename T, typename U>
