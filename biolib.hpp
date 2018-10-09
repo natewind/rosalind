@@ -194,7 +194,7 @@ namespace bio
 
 	inline Protein::Protein(const RNA &mRNA)
 	{
-		static constexpr std::unordered_map<RNA, char> codons =
+		static std::unordered_map<const char *, char> codons =
 		{
 			{ "UUU", 'F' }, { "CUU", 'L' }, { "AUU", 'I' }, { "GUU", 'V' },
 			{ "UUC", 'F' }, { "CUC", 'L' }, { "AUC", 'I' }, { "GUC", 'V' },
