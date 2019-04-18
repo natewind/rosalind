@@ -6,6 +6,7 @@
 #include <iterator>
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
 #include <string_view>
 #include <unordered_map>
 #include <pythonized/range>
@@ -24,11 +25,11 @@ namespace bio
 	template <typename T, typename U>
 	inline bool is_valid(const T &self, const U &abc)
 	{
-		for (auto c : self)
-			if (!contains(abc, c))
-				return false;
-
-		return true;
+		return std::all_of
+		(
+			std::begin(self), std::end(self),
+			[&abc](const auto c) { return contains(abc, c); }
+		);
 	}
 
 	constexpr char complement(char c)
