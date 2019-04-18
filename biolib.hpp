@@ -6,7 +6,6 @@
 #include <iterator>
 #include <stdexcept>
 #include <algorithm>
-#include <functional>
 #include <string_view>
 #include <unordered_map>
 #include <pythonized/range>
@@ -182,10 +181,15 @@ namespace bio
 
 	inline DNA DNA::Complement() const
 	{
-		DNA other(self.length(), 0);
-		auto it = std::rbegin(self);
-		for (auto &c : other)
-			c = complement(*it++);
+		auto other = DNA();
+		other.reserve(self.length());
+
+		std::transform
+		(
+			std::rbegin(self), std::rend(self),
+			std::back_inserter(other), complement
+		);
+
 		return other;
 	}
 
