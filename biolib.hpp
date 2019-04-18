@@ -172,16 +172,12 @@ namespace bio
 
 	inline DNA::DNA(const RNA &other) : Strand(other)
 	{
-		for (auto &c : self)
-			if (c == 'U')
-				c = 'T';
+		std::replace(std::begin(self), std::end(self), 'U', 'T');
 	}
 
 	inline RNA::RNA(const DNA &other) : Strand(other)
 	{
-		for (char &c : self)
-			if (c == 'T')
-				c = 'U';
+		std::replace(std::begin(self), std::end(self), 'T', 'U');
 	}
 
 	inline DNA DNA::Complement() const
