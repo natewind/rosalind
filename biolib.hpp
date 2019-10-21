@@ -15,14 +15,14 @@ namespace bio
 	//========================== Utilities: ===================================
 
 	template <typename T, typename U>
-	constexpr bool contains(const T &range, U value)
+	constexpr auto contains(const T &range, U value) -> bool
 	{
 		using std::begin, std::end;
 		return std::find(begin(range), end(range), value) != end(range);
 	}
 
 	template <typename T, typename U>
-	inline bool is_valid(const T &self, const U &abc)
+	inline auto is_valid(const T &self, const U &abc) -> bool
 	{
 		return std::all_of
 		(
@@ -31,7 +31,7 @@ namespace bio
 		);
 	}
 
-	constexpr char complement(char c)
+	constexpr auto complement(char c) -> char
 	{
 		switch (c)
 		{
@@ -42,15 +42,15 @@ namespace bio
 		}
 	}
 
-	constexpr float pct (float frac) { return 100 * frac; }
+	constexpr auto pct(float frac) -> float { return 100 * frac; }
 
-	constexpr long fibonacci(int n, int a = 1, int b = 1)
+	constexpr auto fibonacci(int n, int a = 1, int b = 1) -> long
 	{
 		long sum[2] = {1, 1};
 
 		for (auto i : py::range(3, n + 1))
 		{
-			bool j = i & 1;
+			auto j = bool(i & 1);
 			sum[j] = a * sum[j] + b * sum[!j];
 		}
 
@@ -78,8 +78,8 @@ namespace bio
 		using std::string::string;
 		inline Strand(const FASTA &record)
 			: std::string(record.Sequence()) {}
-		inline int Distance(const Strand &other) const;
-		inline float ContentGC() const;
+		inline auto Distance(const Strand &other) const -> int;
+		inline auto ContentGC() const -> float;
 		inline auto Count() const;
 	};
 
@@ -93,8 +93,8 @@ namespace bio
 	public:
 		using Strand::Strand;
 		inline DNA(const RNA &other);
-		inline bool IsValid() const { return is_valid(self, alphabet); }
-		inline DNA Complement() const;
+		inline auto IsValid() const { return is_valid(self, alphabet); }
+		inline auto Complement() const -> DNA;
 	};
 
 	class RNA : public Strand
@@ -105,7 +105,7 @@ namespace bio
 	public:
 		using Strand::Strand;
 		inline RNA(const DNA &other);
-		inline bool IsValid() const { return is_valid(self, alphabet); }
+		inline auto IsValid() const { return is_valid(self, alphabet); }
 	};
 
 	class Protein : public std::string
@@ -129,9 +129,9 @@ namespace bio
 			std::getline(stream, s);
 	}
 
-	inline int Strand::Distance(const Strand &other) const
+	inline auto Strand::Distance(const Strand &other) const -> int
 	{
-		int res = 0;
+		auto res = int(0);
 		auto i = std::begin(other);
 
 		for (char c : self)
@@ -144,7 +144,7 @@ namespace bio
 		return res;
 	}
 
-	inline float Strand::ContentGC() const
+	inline auto Strand::ContentGC() const -> float
 	{
 		auto count = std::count_if(begin(), end(),
 			[](auto c) { return (c == 'G') || (c == 'C'); });
@@ -179,7 +179,7 @@ namespace bio
 		std::replace(std::begin(self), std::end(self), 'T', 'U');
 	}
 
-	inline DNA DNA::Complement() const
+	inline auto DNA::Complement() const -> DNA
 	{
 		auto other = DNA();
 		other.reserve(self.length());
@@ -221,13 +221,13 @@ namespace bio
 
 namespace std
 {
-	inline istream & operator>>(istream &stream, bio::FASTA &arg)
+	inline auto operator>>(istream &stream, bio::FASTA &arg) -> istream &
 	{
 		arg.Read(stream);
 		return stream;
 	}
 
-	inline ostream & operator<<(ostream &stream, bio::FASTA &arg)
+	inline auto operator<<(ostream &stream, bio::FASTA &arg) -> ostream &
 	{
 		// TODO
 		return stream;
