@@ -3,7 +3,7 @@
 #include <biolib>
 #include <pythonize>
 
-int main()
+auto main() -> int
 {
 	using namespace bio;
 

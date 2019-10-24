@@ -3,7 +3,7 @@
 #include <biolib>
 #include <pythonize>
 
-int main()
+auto main() -> int
 {
 	auto data = open("rosalind_fib.txt");
 	auto result = open("result.txt", write);

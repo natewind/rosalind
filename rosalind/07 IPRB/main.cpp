@@ -1,9 +1,9 @@
 // Mendel’s First Law
 
 #include <biolib>
-#include <pythonized>
+#include <pythonize>
 
-int main()
+auto main() -> int
 {
 	auto data = open("rosalind_iprb.txt");
 	auto result = open("result.txt", write);
@@ -11,7 +11,7 @@ int main()
 	// TODO: Make ‘void open::read(tuple)’ function in pythonize?
 	int k, m, n;
 	k = input();
-	k = input();
+	m = input();
 	n = input();
 
 	int denom = k + m + n;

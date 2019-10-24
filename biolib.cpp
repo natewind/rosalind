@@ -9,7 +9,7 @@
 
 // g++ main.cpp -lbio -o main.o -std=c++17 -pedantic -Wfatal-errors -O3
 
-int main()
+auto main() -> int
 {
 	// A dummy for make
 }
