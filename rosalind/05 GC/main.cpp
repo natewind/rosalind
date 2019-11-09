@@ -12,7 +12,7 @@ auto main() -> int
 
 	for (FASTA record : open("rosalind_gc.txt"))
 	{
-		auto gc = DNA(record).ContentGC();
+		const auto gc = DNA(record).ContentGC();
 
 		if (gc > max_gc)
 		{
