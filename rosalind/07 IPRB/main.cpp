@@ -14,10 +14,10 @@ auto main() -> int
 	m = input();
 	n = input();
 
-	int denom = k + m + n;
+	auto denom = k + m + n;
 	denom *= denom - 1;
 
 	// TODO: Generalize the algorithm and move it to biolib
-	float num = k * (2 * (m + n) + k - 1) + m * (n + 3 * (m - 1) / 4.0);
+	auto num = float(k * (2 * (m + n) + k - 1) + m * (n + 3 * (m - 1) / 4.0));
 	result.print(num / denom);
 }

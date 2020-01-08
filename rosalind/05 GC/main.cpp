@@ -7,8 +7,8 @@ auto main() -> int
 {
 	using namespace bio;
 
-	str max_id;
-	float max_gc = 0;
+	auto max_id = str();
+	auto max_gc = float(0);
 
 	for (FASTA record : open("rosalind_gc.txt"))
 	{
