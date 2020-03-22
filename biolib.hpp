@@ -14,20 +14,20 @@ namespace bio
 {
 	//========================== Utilities: ===================================
 
-	template <typename T, typename U>
-	constexpr auto contains(const T &range, U value) -> bool
+	template <class Range, class T>
+	constexpr auto contains(Range const &range, T value) -> bool
 	{
 		using std::begin, std::end;
 		return std::find(begin(range), end(range), value) != end(range);
 	}
 
-	template <typename T, typename U>
-	inline auto is_valid(const T &self, const U &abc) -> bool
+	template <class Range1, class Range2>
+	auto is_valid(Range1 const &str, Range2 const &alphabet) -> bool
 	{
 		return std::all_of
 		(
-			std::begin(self), std::end(self),
-			[&abc](const auto c) { return contains(abc, c); }
+			std::begin(str), std::end(str),
+			[&alphabet](const auto c) { return contains(alphabet, c); }
 		);
 	}
 
@@ -44,6 +44,8 @@ namespace bio
 
 	constexpr auto pct(float frac) -> float { return 100 * frac; }
 
+	// TODO: Rename to lucas_sequence(n, p = 1, q = -1)
+	// TODO: Maybe rewrite using tail recursion
 	constexpr auto fibonacci(int n, int a = 1, int b = 1) -> long
 	{
 		long sum[2] = {1, 1};
@@ -61,13 +63,15 @@ namespace bio
 
 	class FASTA
 	{
-		std::string id, sequence;
+		std::string id;
+		std::string sequence;
 
 	public:
-		inline FASTA() = default;
-		inline void Read(std::istream &stream);
-		inline auto & Sequence() const { return sequence; }
-		inline auto & Id() const { return id; }
+		explicit FASTA() = default;
+		void Read(std::istream &stream);
+
+		auto Sequence() const -> std::string const& { return sequence; }
+		auto Id() const -> std::string const& { return id; }
 	};
 
 	class Strand : public std::string
@@ -76,11 +80,12 @@ namespace bio
 
 	public:
 		using std::string::string;
-		inline Strand(const FASTA &record)
+		explicit Strand(FASTA const &record)
 			: std::string(record.Sequence()) {}
-		inline auto Distance(const Strand &other) const -> int;
-		inline auto ContentGC() const -> float;
-		inline auto Count() const;
+
+		auto Distance(const Strand &other) const -> int;
+		auto ContentGC() const -> float;
+		auto Count() const -> std::tuple<int, int, int, int>;
 	};
 
 	class RNA;
@@ -92,9 +97,9 @@ namespace bio
 
 	public:
 		using Strand::Strand;
-		inline DNA(const RNA &other);
-		inline auto IsValid() const { return is_valid(self, alphabet); }
-		inline auto Complement() const -> DNA;
+		explicit DNA(const RNA &other);
+		auto IsValid() const -> bool { return is_valid(self, alphabet); }
+		auto Complement() const -> DNA;
 	};
 
 	class RNA : public Strand
@@ -104,20 +109,21 @@ namespace bio
 
 	public:
 		using Strand::Strand;
-		inline RNA(const DNA &other);
-		inline auto IsValid() const { return is_valid(self, alphabet); }
+		RNA(const DNA &other);
+		auto IsValid() const -> bool { return is_valid(self, alphabet); }
 	};
 
 	class Protein : public std::string
 	{
 		// TODO
 	public:
-		inline Protein(const RNA &mRNA);
+		explicit Protein(const RNA &mRNA);
 	};
 
 	//========================== Definitions: =================================
 
-	inline void FASTA::Read(std::istream &stream)
+	// TODO: Get rid of the exception, use a named constructor -> std::optional
+	void FASTA::Read(std::istream &stream)
 	{
 		if (stream.peek() != '>')
 			throw std::domain_error("Not FASTA format");
@@ -129,9 +135,9 @@ namespace bio
 			std::getline(stream, s);
 	}
 
-	inline auto Strand::Distance(const Strand &other) const -> int
+	auto Strand::Distance(const Strand &other) const -> int
 	{
-		auto res = int(0);
+		auto res = 0;
 		auto i = std::begin(other);
 
 		for (char c : self)
@@ -144,14 +150,15 @@ namespace bio
 		return res;
 	}
 
-	inline auto Strand::ContentGC() const -> float
+	auto Strand::ContentGC() const -> float
 	{
-		auto count = std::count_if(begin(), end(),
-			[](auto c) { return (c == 'G') || (c == 'C'); });
+		constexpr auto is_gc = [](auto c) { return (c == 'G') || (c == 'C'); };
+
+		auto const count = std::count_if(begin(), end(), is_gc);
 		return float(count) / length();
 	}
 
-	inline auto Strand::Count() const
+	auto Strand::Count() const -> std::tuple<int, int, int, int>
 	{
 		int N[4] = {0};
 
@@ -166,20 +173,20 @@ namespace bio
 			}
 		}
 
-		return std::make_tuple(N[0], N[1], N[2], N[3]);
+		return { N[0], N[1], N[2], N[3] };
 	}
 
-	inline DNA::DNA(const RNA &other) : Strand(other)
+	DNA::DNA(const RNA &other) : Strand(other)
 	{
 		std::replace(std::begin(self), std::end(self), 'U', 'T');
 	}
 
-	inline RNA::RNA(const DNA &other) : Strand(other)
+	RNA::RNA(const DNA &other) : Strand(other)
 	{
 		std::replace(std::begin(self), std::end(self), 'T', 'U');
 	}
 
-	inline auto DNA::Complement() const -> DNA
+	auto DNA::Complement() const -> DNA
 	{
 		auto other = DNA();
 		other.reserve(self.length());
@@ -193,9 +200,9 @@ namespace bio
 		return other;
 	}
 
-	inline Protein::Protein(const RNA &mRNA)
+	Protein::Protein(const RNA &mRNA)
 	{
-		static std::unordered_map<const char *, char> codons =
+		static std::unordered_map<const char*, char> codons =
 		{
 			{ "UUU", 'F' }, { "CUU", 'L' }, { "AUU", 'I' }, { "GUU", 'V' },
 			{ "UUC", 'F' }, { "CUC", 'L' }, { "AUC", 'I' }, { "GUC", 'V' },
@@ -216,6 +223,8 @@ namespace bio
 		};
 
 		// TODO
+		auto silence_warning = mRNA.IsValid();
+		silence_warning = silence_warning;
 	}
 }
 
@@ -230,6 +239,10 @@ namespace std
 	inline auto operator<<(ostream &stream, bio::FASTA &arg) -> ostream &
 	{
 		// TODO
+
+		auto silence_warning = arg;
+		silence_warning = silence_warning;
+
 		return stream;
 	}
 }

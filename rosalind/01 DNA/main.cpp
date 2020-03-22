@@ -7,7 +7,8 @@ auto main() -> int
 {
 	auto data = open("rosalind_dna.txt");
 	auto result = open("result.txt", write);
-	bio::DNA strand = data.input();
-	auto [A, C, G, T] = strand.Count();
+
+	bio::DNA const dna = data.input();
+	auto const [A, C, G, T] = dna.Count();
 	result.print(A, C, G, T);
 }
