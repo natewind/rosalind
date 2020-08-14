@@ -27,7 +27,7 @@ namespace bio
 		return std::all_of
 		(
 			std::begin(str), std::end(str),
-			[&alphabet](const auto c) { return contains(alphabet, c); }
+			[&alphabet](auto const c) { return contains(alphabet, c); }
 		);
 	}
 
@@ -83,7 +83,7 @@ namespace bio
 		explicit Strand(FASTA const &record)
 			: std::string(record.Sequence()) {}
 
-		auto Distance(const Strand &other) const -> int;
+		auto Distance(Starnd const &other) const -> int;
 		auto ContentGC() const -> float;
 		auto Count() const -> std::tuple<int, int, int, int>;
 	};
@@ -97,7 +97,7 @@ namespace bio
 
 	public:
 		using Strand::Strand;
-		explicit DNA(const RNA &other);
+		explicit DNA(RNA const &other);
 		auto IsValid() const -> bool { return is_valid(self, alphabet); }
 		auto Complement() const -> DNA;
 	};
@@ -109,7 +109,7 @@ namespace bio
 
 	public:
 		using Strand::Strand;
-		RNA(const DNA &other);
+		RNA(DNA const &other);
 		auto IsValid() const -> bool { return is_valid(self, alphabet); }
 	};
 
@@ -117,7 +117,7 @@ namespace bio
 	{
 		// TODO
 	public:
-		explicit Protein(const RNA &mRNA);
+		explicit Protein(RNA const &mRNA);
 	};
 
 	//========================== Definitions: =================================
@@ -135,7 +135,7 @@ namespace bio
 			std::getline(stream, s);
 	}
 
-	auto Strand::Distance(const Strand &other) const -> int
+	auto Strand::Distance(Strand const &other) const -> int
 	{
 		auto res = 0;
 		auto i = std::begin(other);
@@ -176,12 +176,12 @@ namespace bio
 		return { N[0], N[1], N[2], N[3] };
 	}
 
-	DNA::DNA(const RNA &other) : Strand(other)
+	DNA::DNA(RNA const &other) : Strand(other)
 	{
 		std::replace(std::begin(self), std::end(self), 'U', 'T');
 	}
 
-	RNA::RNA(const DNA &other) : Strand(other)
+	RNA::RNA(DNA const &other) : Strand(other)
 	{
 		std::replace(std::begin(self), std::end(self), 'T', 'U');
 	}
@@ -200,9 +200,9 @@ namespace bio
 		return other;
 	}
 
-	Protein::Protein(const RNA &mRNA)
+	Protein::Protein(RNA const &mRNA)
 	{
-		static std::unordered_map<const char*, char> codons =
+		static std::unordered_map<char const*, char> codons =
 		{
 			{ "UUU", 'F' }, { "CUU", 'L' }, { "AUU", 'I' }, { "GUU", 'V' },
 			{ "UUC", 'F' }, { "CUC", 'L' }, { "AUC", 'I' }, { "GUC", 'V' },
