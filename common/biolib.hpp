@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <string_view>
 #include <unordered_map>
-#include <pythonized/range>
+#include "range.hpp"
 
 namespace bio
 {
@@ -50,7 +50,7 @@ namespace bio
 	{
 		long sum[2] = {1, 1};
 
-		for (auto i : py::range(3, n + 1))
+		for (auto i : utils::range(3, n + 1))
 		{
 			auto j = bool(i & 1);
 			sum[j] = a * sum[j] + b * sum[!j];
