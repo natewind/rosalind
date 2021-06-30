@@ -158,8 +158,6 @@ namespace utils
 		auto input() { return utils::input("", stream); }
 		constexpr auto begin() { return ifstream_iterator(stream); }
 		constexpr auto end() { return nullptr; }
-
-		// TODO: Binary writing/reading
 	};
 
 	printer print(std::cout);
