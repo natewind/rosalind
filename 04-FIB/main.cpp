@@ -1,7 +1,7 @@
 // Rabbits and Recurrence Relations
 
-#include <biolib>
 #include <pythonize>
+#include "../common/biolib.hpp"
 
 auto main() -> int
 {

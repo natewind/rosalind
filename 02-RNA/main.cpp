@@ -1,7 +1,7 @@
 // Transcribing DNA into RNA
 
-#include <biolib>
 #include <pythonize>
+#include "../common/biolib.hpp"
 
 auto main() -> int
 {

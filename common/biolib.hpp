@@ -38,7 +38,7 @@ namespace bio
 			case 'A': return 'T';
 			case 'C': return 'G';
 			case 'G': return 'C';
-			case 'T': return 'A';
+			default : return 'A';
 		}
 	}
 
@@ -83,7 +83,7 @@ namespace bio
 		explicit Strand(FASTA const &record)
 			: std::string(record.Sequence()) {}
 
-		auto Distance(Starnd const &other) const -> int;
+		auto Distance(Strand const &other) const -> int;
 		auto ContentGC() const -> float;
 		auto Count() const -> std::tuple<int, int, int, int>;
 	};

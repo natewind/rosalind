@@ -1,7 +1,7 @@
 // Complementing a Strand of DNA
 
-#include <biolib>
 #include <pythonize>
+#include "../common/biolib.hpp"
 
 auto main() -> int
 {
