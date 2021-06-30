@@ -1,4 +1,6 @@
-# [Rosalind](http://rosalind.info/) / Bioinformatics Stronghold
+# [Rosalind](http://rosalind.info/)
+
+## Bioinformatics Stronghold
 
 01. [Counting DNA Nucleotides](https://github.com/natewind/rosalind/tree/master/01-DNA)
 02. [Transcribing DNA into RNA](https://github.com/natewind/rosalind/tree/master/02-RNA)
