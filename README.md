@@ -1,13 +1,12 @@
-# Examples of library usage
-## Problems from [Rosalind](http://rosalind.info/)’s Bioinformatics Stronghold
+# Problems from the [Rosalind](http://rosalind.info/) Bioinformatics Stronghold
 
-01. Counting DNA Nucleotides
-02. Transcribing DNA into RNA
-03. Complementing a Strand of DNA
-04. Rabbits and Recurrence Relations
-05. Computing GC Content
-06. Counting Point Mutations
-07. Mendel’s First Law
+01. [Counting DNA Nucleotides](https://github.com/natewind/rosalind/tree/master/01-DNA)
+02. [Transcribing DNA into RNA](https://github.com/natewind/rosalind/tree/master/02-RNA)
+03. [Complementing a Strand of DNA](https://github.com/natewind/rosalind/tree/master/03-REVC)
+04. [Rabbits and Recurrence Relations](https://github.com/natewind/rosalind/tree/master/04-FIB)
+05. [Computing GC Content](https://github.com/natewind/rosalind/tree/master/05-GC)
+06. [Counting Point Mutations](https://github.com/natewind/rosalind/tree/master/06-HAMM)
+07. [Mendel’s First Law](https://github.com/natewind/rosalind/tree/master/07-IPRB)
 08. Translating RNA into Protein
 09. Finding a Motif in DNA
 10. Mortal Fibonacci Rabbits
