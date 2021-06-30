@@ -1,5 +1,5 @@
-#ifndef RANGE_HPP
-#define RANGE_HPP
+#ifndef UTILS_RANGE_HPP
+#define UTILS_RANGE_HPP
 
 #include <iterator> // std::input_iterator_tag
 

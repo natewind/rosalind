@@ -1,16 +1,18 @@
 // Computing GC Content
 
-#include <pythonize>
+#include <string>
+
+#include "../common/io.hpp"
 #include "../common/biolib.hpp"
 
 auto main() -> int
 {
 	using namespace bio;
 
-	auto max_id = str();
+	auto max_id = std::string();
 	auto max_gc = float(0);
 
-	for (FASTA record : open("rosalind_gc.txt"))
+	for (FASTA record : utils::open("rosalind_gc.txt"))
 	{
 		auto const gc = DNA(record).ContentGC();
 
@@ -21,7 +23,7 @@ auto main() -> int
 		}
 	}
 
-	auto result = open("result.txt", write);
+	auto result = utils::open("result.txt", utils::write);
 	result.print(max_id);
 	result.print(pct(max_gc));
 }

@@ -1,17 +1,17 @@
 // Mendel’s First Law
 
-#include <pythonize>
+#include "../common/io.hpp"
 #include "../common/biolib.hpp"
 
 auto main() -> int
 {
-	auto data = open("rosalind_iprb.txt");
-	auto result = open("result.txt", write);
+	auto data = utils::open("rosalind_iprb.txt");
+	auto result = utils::open("result.txt", utils::write);
 
 	// TODO: Make ‘void open::read(tuple)’ function in pythonize?
-	auto const k = int(input());
-	auto const m = int(input());
-	auto const n = int(input());
+	auto const k = int(utils::input());
+	auto const m = int(utils::input());
+	auto const n = int(utils::input());
 
 	auto denom = k + m + n;
 	denom *= denom - 1;

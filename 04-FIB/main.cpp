@@ -1,12 +1,12 @@
 // Rabbits and Recurrence Relations
 
-#include <pythonize>
+#include "../common/io.hpp"
 #include "../common/biolib.hpp"
 
 auto main() -> int
 {
-	auto data = open("rosalind_fib.txt");
-	auto result = open("result.txt", write);
+	auto data = utils::open("rosalind_fib.txt");
+	auto result = utils::open("result.txt", utils::write);
 
 	auto const n = int(data.input());
 	auto const k = int(data.input());
