@@ -17,7 +17,11 @@
 
 auto main() -> int
 {
-	auto const [RR, Rr, rr] = open("rosalind_iprb.txt").read<int, int, int>();
+	// auto const [RR, Rr, rr] = open("rosalind_iprb.txt").read<int, int, int>();
+
+	auto const RR = 22,
+	           Rr = 20,
+	           rr = 22;
 
 	auto const total = RR + Rr + rr;
 	// auto const total_outcomes = total * (total - 1) / 2;
@@ -54,8 +58,6 @@ auto main() -> int
 		(4 * (total * (total - 1) - rr * (rr - 1) - Rr * rr) - Rr * (Rr - 1))
 		/
 		(4 * total * (total - 1));
-
-	// WHAT THE ACTUAL FUCK
 
 	open("result.txt").print(p_dominant);
 }

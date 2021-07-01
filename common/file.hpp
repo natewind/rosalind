@@ -106,6 +106,8 @@ public:
 		if constexpr (sizeof...(Ts) > 0)
 		{
 			auto x = read_one<T>(stream);
+
+			// TODO: FIX EVALUATION ORDER!
 			return std::tuple(std::move(x), read_one<Ts>(stream)...);
 		}
 
