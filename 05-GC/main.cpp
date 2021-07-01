@@ -1,6 +1,7 @@
 // Computing GC Content
 
-#include <string> // std::string
+#include <string>  // std::string
+#include <utility> // std::move
 
 #include "../common/file.hpp"
 #include "../common/biolib.hpp"
@@ -9,13 +10,8 @@ struct RecordGC
 {
 	std::string id;
 	bio::Percent gc;
-};
 
-auto main() -> int
-{
-	auto max = RecordGC {{}, 0};
-
-	for (bio::FASTA record : open("rosalind_gc.txt"))
+	constexpr void update_max(bio::FASTA record)
 	{
 		auto const gc = gc_content(record.get_dna());
 
@@ -25,6 +21,14 @@ auto main() -> int
 			max.id = record.id;
 		}
 	}
+};
+
+auto main() -> int
+{
+	auto max = RecordGC {{}, 0};
+
+	for (bio::FASTA record : open("rosalind_gc.txt"))
+		max.update_max(std::move(record));
 
 	auto result = open("result.txt");
 	result.print(max.id);
