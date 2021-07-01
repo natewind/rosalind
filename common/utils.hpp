@@ -10,13 +10,6 @@
 // #include <unordered_map>
 // #include "range.hpp"
 
-template <class Range, class T>
-constexpr auto contains(Range const &range, T value) -> bool
-{
-	using std::begin, std::end;
-	return std::find(begin(range), end(range), value) != end(range);
-}
-
 constexpr auto pct(float frac) -> float { return 100 * frac; }
 
 // TODO: Rename to lucas_sequence(n, p = 1, q = -1)

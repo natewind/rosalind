@@ -14,13 +14,6 @@ namespace bio
 {
 	//========================== Utilities: ===================================
 
-	template <class Range, class T>
-	constexpr auto contains(Range const &range, T value) -> bool
-	{
-		using std::begin, std::end;
-		return std::find(begin(range), end(range), value) != end(range);
-	}
-
 	constexpr auto complement(char c) -> char
 	{
 		switch (c)
@@ -83,7 +76,6 @@ namespace bio
 	class DNA : public Strand
 	{
 		Strand &self = *this;
-		static constexpr char alphabet[] = "ACGT";
 
 	public:
 		using Strand::Strand;
@@ -94,7 +86,6 @@ namespace bio
 	class RNA : public Strand
 	{
 		Strand &self = *this;
-		static constexpr char alphabet[] = "ACGU";
 
 	public:
 		using Strand::Strand;
