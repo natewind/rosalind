@@ -8,15 +8,24 @@
 #include <cstddef>  // std::ptrdiff_t, std::nullptr_t
 #include <iterator> // std::input_iterator_tag
 
+template <class T>
+constexpr auto read(std::istream &source)
+{
+	T x;
+	source >> x;
+	return x;
+}
+
 class istream_iterator
 {
 protected:
 	std::istream &in;
 
-	// TODO: Iterate through chars without reading everything twice!
 	void skip_ws(char stop = '\n')
 	{
-		for (char c; (c = in.peek()) != stop && std::isspace(c); in.get());
+		char c;
+		while ((c = in.get()) != stop && std::isspace(c));
+		in.unget();
 	}
 
 public:
@@ -25,8 +34,7 @@ public:
 	template <class T>
 	operator T()
 	{
-		T res;
-		in >> res;
+		auto res = read<T>(in);
 		skip_ws();
 		return res;
 	}
@@ -58,8 +66,7 @@ struct ifstream_iterator : public istream_iterator
 	template <class T>
 	operator T()
 	{
-		T res;
-		in >> res;
+		auto res = read<T>(in);
 		skip_ws(EOF);
 		return res;
 	}
@@ -95,14 +102,9 @@ public:
 	template <class T, class... Ts>
 	constexpr auto read()
 	{
-		if constexpr (sizeof...(Ts) == 0)
-		{
-			T x;
-			stream >> x;
-			return x;
-		}
-
-		else return std::tuple { read<T>(), read<Ts>()... };
+		if constexpr (sizeof...(Ts) > 0)
+			return std::tuple { read<T>(stream), read<Ts>(stream)... };
+		else return read<T>(stream);
 	}
 
 	template <class T, class... Ts>
