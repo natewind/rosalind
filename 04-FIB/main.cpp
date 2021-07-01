@@ -5,10 +5,6 @@
 
 auto main() -> int
 {
-	auto data = utils::open("rosalind_fib.txt");
-	auto result = utils::open("result.txt", utils::write);
-
-	auto const n = int(data.input());
-	auto const k = int(data.input());
-	result.print(bio::fibonacci(n, k));
+	auto const [n, k] = open("rosalind_fib.txt").read<int, int>();
+	open("result.txt", write).print(bio::fibonacci(n, k));
 }

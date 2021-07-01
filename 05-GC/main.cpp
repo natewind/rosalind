@@ -12,7 +12,7 @@ auto main() -> int
 	auto max_id = std::string();
 	auto max_gc = float(0);
 
-	for (FASTA record : utils::open("rosalind_gc.txt"))
+	for (FASTA record : open("rosalind_gc.txt"))
 	{
 		auto const gc = DNA(record).ContentGC();
 
@@ -23,7 +23,7 @@ auto main() -> int
 		}
 	}
 
-	auto result = utils::open("result.txt", utils::write);
+	auto result = open("result.txt", write);
 	result.print(max_id);
 	result.print(pct(max_gc));
 }

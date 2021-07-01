@@ -50,7 +50,7 @@ namespace bio
 	{
 		long sum[2] = {1, 1};
 
-		for (auto i : utils::range(3, n + 1))
+		for (auto i : range(3, n + 1))
 		{
 			auto j = bool(i & 1);
 			sum[j] = a * sum[j] + b * sum[!j];
@@ -85,7 +85,7 @@ namespace bio
 
 		auto Distance(Strand const &other) const -> int;
 		auto ContentGC() const -> float;
-		auto Count() const -> std::tuple<int, int, int, int>;
+		auto CountBases() const -> std::tuple<int, int, int, int>;
 	};
 
 	class RNA;
@@ -158,7 +158,7 @@ namespace bio
 		return float(count) / length();
 	}
 
-	auto Strand::Count() const -> std::tuple<int, int, int, int>
+	auto Strand::CountBases() const -> std::tuple<int, int, int, int>
 	{
 		int N[4] = {0};
 
