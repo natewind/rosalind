@@ -1,6 +1,6 @@
 // Complementing a Strand of DNA
 
-#include "../common/io.hpp"
+#include "../common/file.hpp"
 #include "../common/biolib.hpp"
 
 // TODO: Move to biolib

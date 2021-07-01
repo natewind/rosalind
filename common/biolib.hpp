@@ -66,7 +66,6 @@ namespace bio
 		explicit Strand(FASTA const &record)
 			: std::string(record.Sequence()) {}
 
-		auto Distance(Strand const &other) const -> int;
 		auto ContentGC() const -> float;
 		auto CountBases() const -> std::tuple<int, int, int, int>;
 	};
@@ -114,19 +113,22 @@ namespace bio
 			std::getline(stream, s);
 	}
 
-	auto Strand::Distance(Strand const &other) const -> int
+	auto Distance(Strand const &lhs, Strand const &rhs) -> int
 	{
-		auto res = 0;
-		auto i = std::begin(other);
+		auto dist = 0;
+		auto i = begin(rhs);
 
-		for (char c : self)
+		for (char c : lhs)
 		{
-			res += (c != *i);
-			if (++i == std::end(other))
+			if (c != *i)
+				++dist;
+			if (++i == end(rhs))
 				break;
 		}
 
-		return res;
+		// TODO: Add remaining rhs?
+
+		return dist;
 	}
 
 	auto Strand::ContentGC() const -> float
