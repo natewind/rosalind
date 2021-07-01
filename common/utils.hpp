@@ -17,16 +17,6 @@ constexpr auto contains(Range const &range, T value) -> bool
 	return std::find(begin(range), end(range), value) != end(range);
 }
 
-template <class Range1, class Range2>
-auto is_valid(Range1 const &str, Range2 const &alphabet) -> bool
-{
-	return std::all_of
-	(
-		std::begin(str), std::end(str),
-		[&alphabet](auto const c) { return contains(alphabet, c); }
-	);
-}
-
 constexpr auto pct(float frac) -> float { return 100 * frac; }
 
 // TODO: Rename to lucas_sequence(n, p = 1, q = -1)

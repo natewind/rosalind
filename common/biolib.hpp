@@ -21,16 +21,6 @@ namespace bio
 		return std::find(begin(range), end(range), value) != end(range);
 	}
 
-	template <class Range1, class Range2>
-	auto is_valid(Range1 const &str, Range2 const &alphabet) -> bool
-	{
-		return std::all_of
-		(
-			std::begin(str), std::end(str),
-			[&alphabet](auto const c) { return contains(alphabet, c); }
-		);
-	}
-
 	constexpr auto complement(char c) -> char
 	{
 		switch (c)
@@ -98,7 +88,6 @@ namespace bio
 	public:
 		using Strand::Strand;
 		explicit DNA(RNA const &other);
-		auto IsValid() const -> bool { return is_valid(self, alphabet); }
 		auto ReverseComplement() const -> DNA;
 	};
 
@@ -110,7 +99,6 @@ namespace bio
 	public:
 		using Strand::Strand;
 		RNA(DNA const &other);
-		auto IsValid() const -> bool { return is_valid(self, alphabet); }
 	};
 
 	class Protein : public std::string
@@ -200,7 +188,7 @@ namespace bio
 		return std::move(other);
 	}
 
-	Protein::Protein(RNA const &mRNA)
+	Protein::Protein(RNA const&) // mRNA
 	{
 		static std::unordered_map<char const*, char> codons =
 		{
@@ -221,28 +209,14 @@ namespace bio
 			{ "UGA",  0  }, { "CGA", 'R' }, { "AGA", 'R' }, { "GGA", 'G' },
 			{ "UGG", 'W' }, { "CGG", 'R' }, { "AGG", 'R' }, { "GGG", 'G' }
 		};
-
-		// TODO
-		auto silence_warning = mRNA.IsValid();
-		silence_warning = silence_warning;
 	}
 }
 
 namespace std
 {
-	inline auto operator>>(istream &stream, bio::FASTA &arg) -> istream &
+	inline auto operator>>(istream &stream, bio::FASTA &arg) -> istream&
 	{
 		arg.Read(stream);
-		return stream;
-	}
-
-	inline auto operator<<(ostream &stream, bio::FASTA &arg) -> ostream &
-	{
-		// TODO
-
-		auto silence_warning = arg;
-		silence_warning = silence_warning;
-
 		return stream;
 	}
 }

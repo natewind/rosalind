@@ -9,7 +9,7 @@
 #include <iterator> // std::input_iterator_tag
 
 template <class T>
-constexpr auto read(std::istream &source)
+constexpr auto read_one(std::istream &source)
 {
 	T x;
 	source >> x;
@@ -34,7 +34,7 @@ public:
 	template <class T>
 	operator T()
 	{
-		auto res = read<T>(in);
+		auto res = read_one<T>(in);
 		skip_ws();
 		return res;
 	}
@@ -66,7 +66,7 @@ struct ifstream_iterator : public istream_iterator
 	template <class T>
 	operator T()
 	{
-		auto res = read<T>(in);
+		auto res = read_one<T>(in);
 		skip_ws(EOF);
 		return res;
 	}
@@ -103,8 +103,8 @@ public:
 	constexpr auto read()
 	{
 		if constexpr (sizeof...(Ts) > 0)
-			return std::tuple { read<T>(stream), read<Ts>(stream)... };
-		else return read<T>(stream);
+			return std::tuple { read_one<T>(stream), read_one<Ts>(stream)... };
+		else return read_one<T>(stream);
 	}
 
 	template <class T, class... Ts>
