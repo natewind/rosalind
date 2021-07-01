@@ -6,6 +6,7 @@
 #include <istream>  // std::istream
 #include <fstream>  // std::fstream
 #include <cstddef>  // std::ptrdiff_t, std::nullptr_t
+#include <utility>  // std::move
 #include <iterator> // std::input_iterator_tag
 
 template <class T>
@@ -103,7 +104,11 @@ public:
 	constexpr auto read()
 	{
 		if constexpr (sizeof...(Ts) > 0)
-			return std::tuple(read_one<T>(stream), read_one<Ts>(stream)...);
+		{
+			auto x = read_one<T>(stream);
+			return std::tuple(std::move(x), read_one<Ts>(stream)...);
+		}
+
 		else return read_one<T>(stream);
 	}
 
