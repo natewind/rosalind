@@ -28,7 +28,6 @@ namespace bio
 	constexpr auto pct(float frac) -> float { return 100 * frac; }
 
 	// TODO: Rename to lucas_sequence(n, p = 1, q = -1)
-	// TODO: Maybe rewrite using tail recursion
 	constexpr auto fibonacci(int n, int a = 1, int b = 1) -> long
 	{
 		long sum[2] = {1, 1};
