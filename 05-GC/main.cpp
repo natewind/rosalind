@@ -23,7 +23,7 @@ auto main() -> int
 		}
 	}
 
-	auto result = open("result.txt", write);
+	auto result = open("result.txt");
 	result.print(max_id);
 	result.print(pct(max_gc));
 }

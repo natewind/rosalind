@@ -6,5 +6,5 @@
 auto main() -> int
 {
 	auto const dna = open("rosalind_rna.txt").read<bio::DNA>();
-	open("result.txt", write).print(bio::RNA(dna));
+	open("result.txt").print(bio::RNA(dna));
 }

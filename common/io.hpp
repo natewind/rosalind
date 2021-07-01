@@ -86,70 +86,36 @@ struct ifstream_iterator : public istream_iterator
 	constexpr auto operator->() const { return this; }
 };
 
-template <class T = std::string, class... Ts>
-auto read(std::istream &source = std::cin)
-{
-	if constexpr (sizeof...(Ts) == 0)
-	{
-		T x;
-		source >> x;
-		return x;
-	}
-
-	else return std::tuple { read<T>(source), read<Ts>(source)... };
-}
-
-class printer
-{
-	std::ostream &out;
-
-public:
-	constexpr printer(std::ostream &stream) : out(stream) {}
-
-	template <class T = char const*, class... Args>
-	constexpr void operator()(T const &value = "", Args const&... args)
-	{
-		if constexpr (std::is_same<T, bool>::value)
-			out << (value ? "True" : "False");
-		else
-			out << value;
-
-		if constexpr (sizeof...(Args) > 0)
-		{
-			out << ' ';
-			(*this)(args...);
-		}
-
-		else out << '\n';
-	}
-};
-
-inline namespace open_modes
-{
-	constexpr auto append   = std::ios_base::app;
-	constexpr auto binary   = std::ios_base::binary;
-	constexpr auto mode_read     = std::ios_base::in; // TODO
-	constexpr auto write    = std::ios_base::out;
-	constexpr auto truncate = std::ios_base::trunc;
-	constexpr auto at_end   = std::ios_base::ate;
-}
-
 class open
 {
 	std::fstream stream;
-	using openmode = std::ios_base::openmode;
 
 public:
-	printer print;
-
-	open(std::string const &filename, openmode mode = mode_read)
-		: print(stream) { stream.open(filename, mode); }
+	open(char const *filename) { stream.open(filename); }
 
 	constexpr auto begin() { return ifstream_iterator(stream); }
 	constexpr auto end() { return nullptr; }
 
-	template <class... Ts>
-	auto read() { return ::read<Ts...>(stream); }
+	template <class T, class... Ts>
+	constexpr auto read()
+	{
+		if constexpr (sizeof...(Ts) == 0)
+		{
+			T x;
+			stream >> x;
+			return x;
+		}
+
+		else return std::tuple { read<T>(), read<Ts>()... };
+	}
+
+	template <class T, class... Ts>
+	constexpr void print(T const &x, Ts const&... xs)
+	{
+		stream << x;
+		((stream << " " << xs), ...);
+		stream << '\n';
+	}
 };
 
 #endif

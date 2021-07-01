@@ -3,22 +3,20 @@
 
 #include <iterator> // std::input_iterator_tag
 
+template <class Int = int>
 class range
 {
-	using VT = int;
-	VT start;
-	VT const stop, step;
+	Int start;
+	Int const stop, step;
 
 public:
-	// TODO: Exception if step == zero?
-
-	constexpr range(VT start, VT stop, VT step = 1)
+	constexpr range(Int start, Int stop, Int step = 1)
 		: start(start), stop(stop), step(step) {}
 
-	constexpr range(VT stop) : range(0, stop) {}
+	constexpr range(Int stop) : range(0, stop) {}
 	constexpr range(range const &) = default;
 
-	using value_type = VT;
+	using value_type = Int;
 	using difference_type = value_type;
 	using pointer = value_type *;
 	using reference = value_type &;

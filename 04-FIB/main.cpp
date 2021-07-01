@@ -6,5 +6,5 @@
 auto main() -> int
 {
 	auto const [n, k] = open("rosalind_fib.txt").read<int, int>();
-	open("result.txt", write).print(bio::fibonacci(n, k));
+	open("result.txt").print(bio::fibonacci(n, k));
 }

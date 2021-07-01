@@ -99,7 +99,7 @@ namespace bio
 		using Strand::Strand;
 		explicit DNA(RNA const &other);
 		auto IsValid() const -> bool { return is_valid(self, alphabet); }
-		auto Complement() const -> DNA;
+		auto ReverseComplement() const -> DNA;
 	};
 
 	class RNA : public Strand
@@ -155,7 +155,7 @@ namespace bio
 		constexpr auto is_gc = [](auto c) { return (c == 'G') || (c == 'C'); };
 
 		auto const count = std::count_if(begin(), end(), is_gc);
-		return float(count) / length();
+		return float(count) / size();
 	}
 
 	auto Strand::CountBases() const -> std::tuple<int, int, int, int>
@@ -186,10 +186,10 @@ namespace bio
 		std::replace(std::begin(self), std::end(self), 'T', 'U');
 	}
 
-	auto DNA::Complement() const -> DNA
+	auto DNA::ReverseComplement() const -> DNA
 	{
 		auto other = DNA();
-		other.reserve(self.length());
+		other.reserve(self.size());
 
 		std::transform
 		(
@@ -197,7 +197,7 @@ namespace bio
 			std::back_inserter(other), complement
 		);
 
-		return other;
+		return std::move(other);
 	}
 
 	Protein::Protein(RNA const &mRNA)
