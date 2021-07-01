@@ -101,7 +101,6 @@ auto read(std::istream &source = std::cin)
 
 class printer
 {
-	printer &self = *this;
 	std::ostream &out;
 
 public:
@@ -118,7 +117,7 @@ public:
 		if constexpr (sizeof...(Args) > 0)
 		{
 			out << ' ';
-			self(args...);
+			(*this)(args...);
 		}
 
 		else out << '\n';
@@ -152,7 +151,5 @@ public:
 	template <class... Ts>
 	auto read() { return ::read<Ts...>(stream); }
 };
-
-printer print(std::cout);
 
 #endif
