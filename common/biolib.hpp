@@ -6,10 +6,10 @@
 #include <istream>       // std::istream, std::ostream
 #include <numeric>       // std::accumulate
 #include <iterator>      // std::back_inserter
-#include <algorithm>     // std::replace, std::count_if
+#include <algorithm>     // std::replace, std::count_if, std::min
+#include <functional>    // std::plus, std::not_equal_to
 #include <unordered_map> // std::unordered_map
 
-// TODO: Finish 06-HAMM
 // TODO: Finish 07-IPRB
 
 // TODO: Rewrite on Haskell or Rust
@@ -119,6 +119,17 @@ namespace bio
 
 		return std::count_if(begin(dna.data), end(dna.data), is_gc)
 		     / float(dna.data.size());
+	}
+
+	auto hamming_distance(std::string const &xs, std::string const &ys) -> int
+	{
+		auto const size = std::min(xs.size(), ys.size());
+
+		return std::inner_product
+		(
+			begin(xs), begin(xs) + size, begin(ys),
+			0, std::plus<int>(), std::not_equal_to<int>()
+		);
 	}
 
 	inline auto const codon_table = std::unordered_map<char const*, char>
