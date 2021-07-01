@@ -1,17 +1,13 @@
 #ifndef BIOLIB_HPP
 #define BIOLIB_HPP
 
-#include <tuple>         // std::tuple, std::get, std::tie
+#include <tuple>         // std::tuple, std::get
 #include <string>        // std::string, std::getline
 #include <istream>       // std::istream, std::ostream
 #include <numeric>       // std::accumulate
 #include <iterator>      // std::back_inserter
-#include <algorithm>     // std::replace
+#include <algorithm>     // std::replace, std::count_if
 #include <unordered_map> // std::unordered_map
-#include "range.hpp"
-
-// TODO: Finish lucas_sequence and 04-FIB
-// TODO: std::tie - ???
 
 // TODO: Finish 05-GC
 // TODO: Finish 06-HAMM
@@ -30,6 +26,19 @@ namespace bio
 	{
 		std::string id;
 		std::string sequence;
+
+		auto get_dna() const -> DNA { return {sequence}; }
+	};
+
+	struct Percent
+	{
+		float value;
+		constexpr Percent(float x) : value(100 * x) {}
+
+		constexpr auto operator>(Percent other) const
+		{
+			return value > other.value;
+		}
 	};
 
 	constexpr auto add_base(ACGT ns, char b) -> ACGT
@@ -51,13 +60,13 @@ namespace bio
 		return std::accumulate
 		(
 			begin(xs.data), end(xs.data),
-			ACGT { 0, 0, 0, 0 }, add_base
+			ACGT {0, 0, 0, 0}, add_base
 		);
 	}
 
 	auto transcribe(DNA const &dna) -> RNA
 	{
-		auto rna = RNA { dna.data };
+		auto rna = RNA {dna.data};
 		std::replace(begin(rna.data), end(rna.data), 'T', 'U');
 		return rna;
 	}
@@ -87,50 +96,50 @@ namespace bio
 		return revc;
 	}
 
-	// constexpr auto lucas_sequence(int n, int p = 1, int q = 1) -> long
-	// {
-	// 	auto a = long(0);
-	// 	auto b = long(1);
+	struct LucasSequence
+	{
+		int p = 1;
+		int q = 1;
 
-	// 	for (auto _ : range(2, n + 1))
-	// 	{
-	// 		std::tie(a, b) = std::tuple(b, p * a - q * b);
-	// 	}
+		constexpr LucasSequence(int p, int q) : p(p), q(q) {}
 
-	// 	return (n == 0) ? a : b;
-	// }
+		constexpr auto at(int n, long a = 0, long b = 1) const -> long
+		{
+			return (n == 0) ? a
+			     : (n == 1) ? b
+			     : (n >= 2) ? at(n - 1, b, p * b - q * a)
+			                : at(n + 1, (p * a - b) / q, a);
+		}
 
-	// constexpr auto lucas_sequence(int n, int p = 1, int q = 1) -> long
-	// {
-	// 	long acc[2] = { 0, 1 };
+		constexpr auto operator[](int n) const -> long { return at(n); }
+	};
 
-	// 	for (auto const i : range(2, n + 1))
-	// 	{
-	// 		auto const last = i & 1;
-	// 		acc[last] = p * acc[last] - q * acc[1 - last];
-	// 	}
+	auto gc_content(DNA const &dna) -> Percent
+	{
+		constexpr auto is_gc = [](auto c) { return (c == 'G') || (c == 'C'); };
 
-	// 	return acc[n & 1];
-	// }
+		return std::count_if(begin(dna.data), end(dna.data), is_gc)
+		     / float(dna.data.size());
+	}
 
 	inline auto const codon_table = std::unordered_map<char const*, char>
 	{
-		{ "UUU", 'F' }, { "CUU", 'L' }, { "AUU", 'I' }, { "GUU", 'V' },
-		{ "UUC", 'F' }, { "CUC", 'L' }, { "AUC", 'I' }, { "GUC", 'V' },
-		{ "UUA", 'L' }, { "CUA", 'L' }, { "AUA", 'I' }, { "GUA", 'V' },
-		{ "UUG", 'L' }, { "CUG", 'L' }, { "AUG", 'M' }, { "GUG", 'V' },
-		{ "UCU", 'S' }, { "CCU", 'P' }, { "ACU", 'T' }, { "GCU", 'A' },
-		{ "UCC", 'S' }, { "CCC", 'P' }, { "ACC", 'T' }, { "GCC", 'A' },
-		{ "UCA", 'S' }, { "CCA", 'P' }, { "ACA", 'T' }, { "GCA", 'A' },
-		{ "UCG", 'S' }, { "CCG", 'P' }, { "ACG", 'T' }, { "GCG", 'A' },
-		{ "UAU", 'Y' }, { "CAU", 'H' }, { "AAU", 'N' }, { "GAU", 'D' },
-		{ "UAC", 'Y' }, { "CAC", 'H' }, { "AAC", 'N' }, { "GAC", 'D' },
-		{ "UAA",  0  }, { "CAA", 'Q' }, { "AAA", 'K' }, { "GAA", 'E' },
-		{ "UAG",  0  }, { "CAG", 'Q' }, { "AAG", 'K' }, { "GAG", 'E' },
-		{ "UGU", 'C' }, { "CGU", 'R' }, { "AGU", 'S' }, { "GGU", 'G' },
-		{ "UGC", 'C' }, { "CGC", 'R' }, { "AGC", 'S' }, { "GGC", 'G' },
-		{ "UGA",  0  }, { "CGA", 'R' }, { "AGA", 'R' }, { "GGA", 'G' },
-		{ "UGG", 'W' }, { "CGG", 'R' }, { "AGG", 'R' }, { "GGG", 'G' }
+		{"UUU", 'F'}, {"CUU", 'L'}, {"AUU", 'I'}, {"GUU", 'V'},
+		{"UUC", 'F'}, {"CUC", 'L'}, {"AUC", 'I'}, {"GUC", 'V'},
+		{"UUA", 'L'}, {"CUA", 'L'}, {"AUA", 'I'}, {"GUA", 'V'},
+		{"UUG", 'L'}, {"CUG", 'L'}, {"AUG", 'M'}, {"GUG", 'V'},
+		{"UCU", 'S'}, {"CCU", 'P'}, {"ACU", 'T'}, {"GCU", 'A'},
+		{"UCC", 'S'}, {"CCC", 'P'}, {"ACC", 'T'}, {"GCC", 'A'},
+		{"UCA", 'S'}, {"CCA", 'P'}, {"ACA", 'T'}, {"GCA", 'A'},
+		{"UCG", 'S'}, {"CCG", 'P'}, {"ACG", 'T'}, {"GCG", 'A'},
+		{"UAU", 'Y'}, {"CAU", 'H'}, {"AAU", 'N'}, {"GAU", 'D'},
+		{"UAC", 'Y'}, {"CAC", 'H'}, {"AAC", 'N'}, {"GAC", 'D'},
+		{"UAA",  0 }, {"CAA", 'Q'}, {"AAA", 'K'}, {"GAA", 'E'},
+		{"UAG",  0 }, {"CAG", 'Q'}, {"AAG", 'K'}, {"GAG", 'E'},
+		{"UGU", 'C'}, {"CGU", 'R'}, {"AGU", 'S'}, {"GGU", 'G'},
+		{"UGC", 'C'}, {"CGC", 'R'}, {"AGC", 'S'}, {"GGC", 'G'},
+		{"UGA",  0 }, {"CGA", 'R'}, {"AGA", 'R'}, {"GGA", 'G'},
+		{"UGG", 'W'}, {"CGG", 'R'}, {"AGG", 'R'}, {"GGG", 'G'}
 	};
 }
 
@@ -165,6 +174,11 @@ auto operator>>(std::istream &src, bio::FASTA &fasta) -> std::istream&
 		getline(src, line);
 
 	return src;
+}
+
+auto operator<<(std::ostream &dest, bio::Percent const &pct) -> std::ostream&
+{
+	return dest << pct.value;
 }
 
 #endif

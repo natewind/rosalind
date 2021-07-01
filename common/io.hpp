@@ -103,7 +103,7 @@ public:
 	constexpr auto read()
 	{
 		if constexpr (sizeof...(Ts) > 0)
-			return std::tuple { read_one<T>(stream), read_one<Ts>(stream)... };
+			return std::tuple(read_one<T>(stream), read_one<Ts>(stream)...);
 		else return read_one<T>(stream);
 	}
 

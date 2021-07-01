@@ -6,5 +6,5 @@
 auto main() -> int
 {
 	auto const [n, k] = open("rosalind_fib.txt").read<int, int>();
-	open("result.txt").print(bio::lucas_sequence(n, k, -1));
+	open("result.txt").print(bio::LucasSequence(1, -k)[n]);
 }
