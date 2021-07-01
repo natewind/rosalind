@@ -7,14 +7,12 @@
 
 auto main() -> int
 {
-	using namespace bio;
-
 	auto max_id = std::string();
 	auto max_gc = float(0);
 
-	for (FASTA record : open("rosalind_gc.txt"))
+	for (bio::FASTA record : open("rosalind_gc.txt"))
 	{
-		auto const gc = DNA(record).ContentGC();
+		auto const gc = bio::DNA(record).ContentGC();
 
 		if (gc > max_gc)
 		{

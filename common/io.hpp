@@ -9,10 +9,10 @@
 #include <iterator> // std::input_iterator_tag
 
 template <class T>
-constexpr auto read_one(std::istream &source)
+constexpr auto read_one(std::istream &src)
 {
 	T x;
-	source >> x;
+	src >> x;
 	return x;
 }
 

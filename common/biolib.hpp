@@ -1,18 +1,66 @@
 #ifndef BIOLIB_HPP
 #define BIOLIB_HPP
 
-#include <tuple>
-#include <string>
-#include <iterator>
-#include <stdexcept>
-#include <algorithm>
-#include <string_view>
-#include <unordered_map>
+#include <tuple>         // std::tuple, std::get, std::tie
+#include <string>        // std::string, std::getline
+#include <istream>       // std::istream, std::ostream
+#include <numeric>       // std::accumulate
+#include <iterator>      // std::back_inserter
+#include <algorithm>     // std::replace
+#include <unordered_map> // std::unordered_map
 #include "range.hpp"
+
+// TODO: Finish lucas_sequence and 04-FIB
+// TODO: std::tie - ???
+
+// TODO: Finish 05-GC
+// TODO: Finish 06-HAMM
+// TODO: Finish 07-IPRB
+
+// TODO: Rewrite on Haskell or Rust
 
 namespace bio
 {
-	//========================== Utilities: ===================================
+	using ACGT = std::tuple<int, int, int, int>;
+
+	struct DNA { std::string data; };
+	struct RNA { std::string data; };
+
+	struct FASTA
+	{
+		std::string id;
+		std::string sequence;
+	};
+
+	constexpr auto add_base(ACGT ns, char b) -> ACGT
+	{
+		switch (b)
+		{
+			case 'A': ++std::get<0>(ns); break;
+			case 'C': ++std::get<1>(ns); break;
+			case 'G': ++std::get<2>(ns); break;
+			default : ++std::get<3>(ns); break;
+		}
+
+		return ns;
+	}
+
+	template <class Strand>
+	constexpr auto count_bases(Strand const &xs) -> ACGT
+	{
+		return std::accumulate
+		(
+			begin(xs.data), end(xs.data),
+			ACGT { 0, 0, 0, 0 }, add_base
+		);
+	}
+
+	auto transcribe(DNA const &dna) -> RNA
+	{
+		auto rna = RNA { dna.data };
+		std::replace(begin(rna.data), end(rna.data), 'T', 'U');
+		return rna;
+	}
 
 	constexpr auto complement(char c) -> char
 	{
@@ -25,192 +73,98 @@ namespace bio
 		}
 	}
 
-	constexpr auto pct(float frac) -> float { return 100 * frac; }
-
-	// TODO: Rename to lucas_sequence(n, p = 1, q = -1)
-	constexpr auto fibonacci(int n, int a = 1, int b = 1) -> long
+	auto reverse_complement(DNA const &dna) -> DNA
 	{
-		long sum[2] = {1, 1};
-
-		for (auto i : range(3, n + 1))
-		{
-			auto j = bool(i & 1);
-			sum[j] = a * sum[j] + b * sum[!j];
-		}
-
-		return sum[n & 1];
-	}
-
-	//========================== Objects: =====================================
-
-	class FASTA
-	{
-		std::string id;
-		std::string sequence;
-
-	public:
-		explicit FASTA() = default;
-		void Read(std::istream &stream);
-
-		auto Sequence() const -> std::string const& { return sequence; }
-		auto Id() const -> std::string const& { return id; }
-	};
-
-	class Strand : public std::string
-	{
-		Strand &self = *this;
-
-	public:
-		using std::string::string;
-		explicit Strand(FASTA const &record)
-			: std::string(record.Sequence()) {}
-
-		auto ContentGC() const -> float;
-		auto CountBases() const -> std::tuple<int, int, int, int>;
-	};
-
-	class RNA;
-
-	class DNA : public Strand
-	{
-		Strand &self = *this;
-
-	public:
-		using Strand::Strand;
-		explicit DNA(RNA const &other);
-		auto ReverseComplement() const -> DNA;
-	};
-
-	class RNA : public Strand
-	{
-		Strand &self = *this;
-
-	public:
-		using Strand::Strand;
-		RNA(DNA const &other);
-	};
-
-	class Protein : public std::string
-	{
-		// TODO
-	public:
-		explicit Protein(RNA const &mRNA);
-	};
-
-	//========================== Definitions: =================================
-
-	// TODO: Get rid of the exception, use a named constructor -> std::optional
-	void FASTA::Read(std::istream &stream)
-	{
-		if (stream.peek() != '>')
-			throw std::domain_error("Not FASTA format");
-		stream.get();
-		std::getline(stream, id);
-
-		std::string s;
-		for (char c; (c = stream.peek()) != '>' && c != EOF; sequence += s)
-			std::getline(stream, s);
-	}
-
-	auto distance(Strand const &lhs, Strand const &rhs) -> int
-	{
-		auto dist = 0;
-		auto i = begin(rhs);
-
-		for (char c : lhs)
-		{
-			if (c != *i)
-				++dist;
-			if (++i == end(rhs))
-				break;
-		}
-
-		// TODO: Add remaining rhs?
-
-		return dist;
-	}
-
-	auto Strand::ContentGC() const -> float
-	{
-		constexpr auto is_gc = [](auto c) { return (c == 'G') || (c == 'C'); };
-
-		auto const count = std::count_if(begin(), end(), is_gc);
-		return float(count) / size();
-	}
-
-	auto Strand::CountBases() const -> std::tuple<int, int, int, int>
-	{
-		int N[4] = {0};
-
-		for (auto c : self)
-		{
-			switch (c)
-			{
-				case 'A': ++N[0]; break;
-				case 'C': ++N[1]; break;
-				case 'G': ++N[2]; break;
-				default : ++N[3]; break;
-			}
-		}
-
-		return { N[0], N[1], N[2], N[3] };
-	}
-
-	DNA::DNA(RNA const &other) : Strand(other)
-	{
-		std::replace(std::begin(self), std::end(self), 'U', 'T');
-	}
-
-	RNA::RNA(DNA const &other) : Strand(other)
-	{
-		std::replace(std::begin(self), std::end(self), 'T', 'U');
-	}
-
-	auto DNA::ReverseComplement() const -> DNA
-	{
-		auto other = DNA();
-		other.reserve(self.size());
+		auto revc = DNA();
+		revc.data.reserve(dna.data.size());
 
 		std::transform
 		(
-			std::rbegin(self), std::rend(self),
-			std::back_inserter(other), complement
+			rbegin(dna.data), rend(dna.data),
+			back_inserter(revc.data), complement
 		);
 
-		return std::move(other);
+		return revc;
 	}
 
-	Protein::Protein(RNA const&) // mRNA
+	// constexpr auto lucas_sequence(int n, int p = 1, int q = 1) -> long
+	// {
+	// 	auto a = long(0);
+	// 	auto b = long(1);
+
+	// 	for (auto _ : range(2, n + 1))
+	// 	{
+	// 		std::tie(a, b) = std::tuple(b, p * a - q * b);
+	// 	}
+
+	// 	return (n == 0) ? a : b;
+	// }
+
+	// constexpr auto lucas_sequence(int n, int p = 1, int q = 1) -> long
+	// {
+	// 	long acc[2] = { 0, 1 };
+
+	// 	for (auto const i : range(2, n + 1))
+	// 	{
+	// 		auto const last = i & 1;
+	// 		acc[last] = p * acc[last] - q * acc[1 - last];
+	// 	}
+
+	// 	return acc[n & 1];
+	// }
+
+	inline auto const codon_table = std::unordered_map<char const*, char>
 	{
-		static std::unordered_map<char const*, char> codons =
-		{
-			{ "UUU", 'F' }, { "CUU", 'L' }, { "AUU", 'I' }, { "GUU", 'V' },
-			{ "UUC", 'F' }, { "CUC", 'L' }, { "AUC", 'I' }, { "GUC", 'V' },
-			{ "UUA", 'L' }, { "CUA", 'L' }, { "AUA", 'I' }, { "GUA", 'V' },
-			{ "UUG", 'L' }, { "CUG", 'L' }, { "AUG", 'M' }, { "GUG", 'V' },
-			{ "UCU", 'S' }, { "CCU", 'P' }, { "ACU", 'T' }, { "GCU", 'A' },
-			{ "UCC", 'S' }, { "CCC", 'P' }, { "ACC", 'T' }, { "GCC", 'A' },
-			{ "UCA", 'S' }, { "CCA", 'P' }, { "ACA", 'T' }, { "GCA", 'A' },
-			{ "UCG", 'S' }, { "CCG", 'P' }, { "ACG", 'T' }, { "GCG", 'A' },
-			{ "UAU", 'Y' }, { "CAU", 'H' }, { "AAU", 'N' }, { "GAU", 'D' },
-			{ "UAC", 'Y' }, { "CAC", 'H' }, { "AAC", 'N' }, { "GAC", 'D' },
-			{ "UAA",  0  }, { "CAA", 'Q' }, { "AAA", 'K' }, { "GAA", 'E' },
-			{ "UAG",  0  }, { "CAG", 'Q' }, { "AAG", 'K' }, { "GAG", 'E' },
-			{ "UGU", 'C' }, { "CGU", 'R' }, { "AGU", 'S' }, { "GGU", 'G' },
-			{ "UGC", 'C' }, { "CGC", 'R' }, { "AGC", 'S' }, { "GGC", 'G' },
-			{ "UGA",  0  }, { "CGA", 'R' }, { "AGA", 'R' }, { "GGA", 'G' },
-			{ "UGG", 'W' }, { "CGG", 'R' }, { "AGG", 'R' }, { "GGG", 'G' }
-		};
-	}
+		{ "UUU", 'F' }, { "CUU", 'L' }, { "AUU", 'I' }, { "GUU", 'V' },
+		{ "UUC", 'F' }, { "CUC", 'L' }, { "AUC", 'I' }, { "GUC", 'V' },
+		{ "UUA", 'L' }, { "CUA", 'L' }, { "AUA", 'I' }, { "GUA", 'V' },
+		{ "UUG", 'L' }, { "CUG", 'L' }, { "AUG", 'M' }, { "GUG", 'V' },
+		{ "UCU", 'S' }, { "CCU", 'P' }, { "ACU", 'T' }, { "GCU", 'A' },
+		{ "UCC", 'S' }, { "CCC", 'P' }, { "ACC", 'T' }, { "GCC", 'A' },
+		{ "UCA", 'S' }, { "CCA", 'P' }, { "ACA", 'T' }, { "GCA", 'A' },
+		{ "UCG", 'S' }, { "CCG", 'P' }, { "ACG", 'T' }, { "GCG", 'A' },
+		{ "UAU", 'Y' }, { "CAU", 'H' }, { "AAU", 'N' }, { "GAU", 'D' },
+		{ "UAC", 'Y' }, { "CAC", 'H' }, { "AAC", 'N' }, { "GAC", 'D' },
+		{ "UAA",  0  }, { "CAA", 'Q' }, { "AAA", 'K' }, { "GAA", 'E' },
+		{ "UAG",  0  }, { "CAG", 'Q' }, { "AAG", 'K' }, { "GAG", 'E' },
+		{ "UGU", 'C' }, { "CGU", 'R' }, { "AGU", 'S' }, { "GGU", 'G' },
+		{ "UGC", 'C' }, { "CGC", 'R' }, { "AGC", 'S' }, { "GGC", 'G' },
+		{ "UGA",  0  }, { "CGA", 'R' }, { "AGA", 'R' }, { "GGA", 'G' },
+		{ "UGG", 'W' }, { "CGG", 'R' }, { "AGG", 'R' }, { "GGG", 'G' }
+	};
 }
 
-namespace std
+auto operator>>(std::istream &src, bio::DNA &dna) -> std::istream&
 {
-	inline auto operator>>(istream &stream, bio::FASTA &arg) -> istream&
-	{
-		arg.Read(stream);
-		return stream;
-	}
+	return src >> dna.data;
+}
+
+auto operator>>(std::istream &src, bio::RNA &rna) -> std::istream&
+{
+	return src >> rna.data;
+}
+
+auto operator<<(std::ostream &dest, bio::DNA const &dna) -> std::ostream&
+{
+	return dest << dna.data;
+}
+
+auto operator<<(std::ostream &dest, bio::RNA const &rna) -> std::ostream&
+{
+	return dest << rna.data;
+}
+
+auto operator>>(std::istream &src, bio::FASTA &fasta) -> std::istream&
+{
+	src.get();
+	getline(src, fasta.id);
+
+	auto line = std::string();
+
+	for (char c; (c = src.peek()) != '>' && c != EOF; fasta.sequence += line)
+		getline(src, line);
+
+	return src;
 }
 
 #endif
