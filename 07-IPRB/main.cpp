@@ -5,13 +5,13 @@
 
 auto main() -> int
 {
-	auto const [n_dominant, n_heterozygous, n_recessive] = open("rosalind_iprb.txt").read<int, int, int>();
+	auto const [k, m, n] = open("rosalind_iprb.txt").read<int, int, int>();
 
-	auto denom = n_dominant + n_heterozygous + n_recessive;
+	auto denom = k + m + n;
 	denom *= denom - 1;
 
 	// TODO: Generalize the algorithm and move it to biolib
-	auto const num = n_dominant * (2 * (n_heterozygous + n_recessive) + n_dominant - 1) + n_heterozygous * (n_recessive + 3 * (n_heterozygous - 1) / 4.0f);
+	auto const num = k * (2 * (m + n) + k - 1) + m * (n + 3 * (m - 1) / 4.0f);
 	open("result.txt").print(num / denom);
 }
 
