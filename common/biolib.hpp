@@ -113,7 +113,7 @@ namespace bio
 			std::getline(stream, s);
 	}
 
-	auto Distance(Strand const &lhs, Strand const &rhs) -> int
+	auto distance(Strand const &lhs, Strand const &rhs) -> int
 	{
 		auto dist = 0;
 		auto i = begin(rhs);

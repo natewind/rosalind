@@ -6,5 +6,5 @@
 auto main() -> int
 {
 	auto const [s, t] = open("rosalind_hamm.txt").read<bio::DNA, bio::DNA>();
-	open("result.txt").print(Distance(s, t));
+	open("result.txt").print(distance(s, t));
 }
