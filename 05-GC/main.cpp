@@ -6,12 +6,12 @@
 #include "../common/file.hpp"
 #include "../common/biolib.hpp"
 
-struct RecordGC
+struct MaxGC
 {
 	std::string id;
 	bio::Percent gc;
 
-	void update_max(bio::FASTA record)
+	void update(bio::FASTA record)
 	{
 		auto const new_gc = gc_content(record.get_dna());
 
@@ -25,10 +25,10 @@ struct RecordGC
 
 auto main() -> int
 {
-	auto max = RecordGC {{}, 0};
+	auto max = MaxGC {{}, 0};
 
 	for (bio::FASTA record : open("rosalind_gc.txt"))
-		max.update_max(std::move(record));
+		max.update(std::move(record));
 
 	auto result = open("result.txt");
 	result.print(max.id);
