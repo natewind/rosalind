@@ -11,14 +11,14 @@ struct RecordGC
 	std::string id;
 	bio::Percent gc;
 
-	constexpr void update_max(bio::FASTA record)
+	void update_max(bio::FASTA record)
 	{
-		auto const gc = gc_content(record.get_dna());
+		auto const new_gc = gc_content(record.get_dna());
 
-		if (gc > max.gc)
+		if (new_gc > gc)
 		{
-			max.gc = gc;
-			max.id = record.id;
+			gc = new_gc;
+			id = record.id;
 		}
 	}
 };
