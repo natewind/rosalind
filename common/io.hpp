@@ -11,6 +11,10 @@
 #include <string_view> // std::string_view
 #include <type_traits> // std::is_same
 
+// open::(open, input, print, INPUT_ITERATOR)
+// write
+// input
+
 namespace utils
 {
 	class istream_iterator
@@ -104,8 +108,6 @@ namespace utils
 			stream >> res;
 			return res;
 		}
-
-		class split; // TODO (lazy)
 	};
 
 	class printer
@@ -161,23 +163,6 @@ namespace utils
 	};
 
 	printer print(std::cout);
-
-	/*template <typename T = char const*, typename... Args>
-	inline void print(T const value = "", Args const... args)
-	{
-		if constexpr (std::is_same<T, bool>::value)
-			std::cout << (value ? "True" : "False");
-		else
-			std::cout << value;
-
-		if constexpr (sizeof...(Args) > 0)
-		{
-			std::cout << ' ';
-			print(args...);
-		}
-
-		else std::cout << '\n';
-	}*/
 }
 
 #endif
