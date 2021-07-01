@@ -1,16 +1,12 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <ios>         // std::ios_base
-#include <tuple>
-#include <string>      // std::string
-#include <cctype>      // std::isspace
-#include <istream>     // std::istream
-#include <fstream>     // std::ifstream
-#include <cstddef>     // std::ptrdiff_t, std::nullptr_t
-#include <iostream>    // std::cin, std::cout
-#include <string_view> // std::string_view
-#include <type_traits> // std::is_same
+#include <tuple>    // std::tuple
+#include <cctype>   // std::isspace
+#include <istream>  // std::istream
+#include <fstream>  // std::fstream
+#include <cstddef>  // std::ptrdiff_t, std::nullptr_t
+#include <iterator> // std::input_iterator_tag
 
 class istream_iterator
 {
