@@ -9,7 +9,7 @@
 struct MaxGC
 {
 	std::string id;
-	bio::Percent gc;
+	bio::Percent gc = 0;
 
 	void update(bio::FASTA record)
 	{
@@ -25,7 +25,7 @@ struct MaxGC
 
 auto main() -> int
 {
-	auto max = MaxGC {{}, 0};
+	auto max = MaxGC();
 
 	for (bio::FASTA record : open("rosalind_gc.txt"))
 		max.update(std::move(record));
