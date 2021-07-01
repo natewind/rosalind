@@ -1,18 +1,5 @@
 namespace bio
 {
-	constexpr auto pct(float frac) -> float { return 100 * frac; }
-
-
-
-	class Strand : public std::string
-	{
-
-	public:
-		using std::string::string;
-		explicit Strand(FASTA const &record)
-			: std::string(record.Sequence()) {}
-	};
-
 	auto distance(Strand const &lhs, Strand const &rhs) -> int
 	{
 		auto dist = 0;
@@ -30,5 +17,4 @@ namespace bio
 
 		return dist;
 	}
-
 }

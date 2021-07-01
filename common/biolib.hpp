@@ -9,7 +9,6 @@
 #include <algorithm>     // std::replace, std::count_if
 #include <unordered_map> // std::unordered_map
 
-// TODO: Finish 05-GC
 // TODO: Finish 06-HAMM
 // TODO: Finish 07-IPRB
 
