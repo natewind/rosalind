@@ -10,8 +10,6 @@
 #include <functional>    // std::plus, std::not_equal_to
 #include <unordered_map> // std::unordered_map
 
-// TODO: Finish 07-IPRB
-
 // TODO: Rewrite on Haskell or Rust
 
 namespace bio

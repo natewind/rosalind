@@ -120,8 +120,6 @@ public:
 			return read_tuple<Ts...>(stream);
 	}
 
-	// TODO: Print tuples with std::apply => 01-DNA
-
 	template <class T, class... Ts>
 	constexpr void print(T const &x, Ts const&... xs)
 	{
