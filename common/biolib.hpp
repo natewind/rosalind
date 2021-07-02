@@ -95,10 +95,9 @@ namespace bio
 
 	struct LucasSequence
 	{
-		int p = 1;
-		int q = 1;
+		int p, q;
 
-		constexpr LucasSequence(int p, int q) : p(p), q(q) {}
+		constexpr LucasSequence(int p = 1, int q = 1) : p(p), q(q) {}
 
 		constexpr auto at(int n, long a = 0, long b = 1) const -> long
 		{
