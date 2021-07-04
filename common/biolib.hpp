@@ -61,9 +61,9 @@ namespace bio
 		);
 	}
 
-	auto transcribe(DNA const &dna) -> RNA
+	auto transcribe(DNA dna) -> RNA
 	{
-		auto rna = RNA {dna.data};
+		auto rna = RNA {std::move(dna.data)};
 		std::replace(begin(rna.data), end(rna.data), 'T', 'U');
 		return rna;
 	}
