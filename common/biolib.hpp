@@ -4,6 +4,7 @@
 #include <tuple>         // std::tuple, std::get
 #include <string>        // std::string, std::getline
 #include <istream>       // std::istream, std::ostream
+#include <utility>       // std::move
 #include <numeric>       // std::accumulate
 #include <iterator>      // std::back_inserter
 #include <algorithm>     // std::replace, std::count_if, std::min
