@@ -1,10 +1,10 @@
 // Computing GC Content
 
-#include <string>  // std::string
-#include <utility> // std::move
-
 #include "../common/file.hpp"
 #include "../common/biolib.hpp"
+
+#include <string>  // std::string
+#include <utility> // std::move
 
 struct MaxGC
 {

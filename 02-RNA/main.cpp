@@ -1,9 +1,9 @@
 // Transcribing DNA into RNA
 
-#include <utility> // std::move
-
 #include "../common/file.hpp"
 #include "../common/biolib.hpp"
+
+#include <utility> // std::move
 
 auto main() -> int
 {
