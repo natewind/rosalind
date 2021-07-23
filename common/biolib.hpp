@@ -129,6 +129,8 @@ namespace bio
 		);
 	}
 
+	constexpr auto binomial2(int n) -> int { return n * (n - 1) / 2; }
+
 	inline auto const codon_table = std::unordered_map<char const*, char>
 	{
 		{"UUU", 'F'}, {"CUU", 'L'}, {"AUU", 'I'}, {"GUU", 'V'},
