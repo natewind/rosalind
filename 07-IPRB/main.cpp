@@ -14,8 +14,8 @@ auto main() -> int
 	auto const Rr_Rr = bio::binomial2(Rr);
 	auto const Rr_rr = Rr * rr;
 
-	auto const recessive_pairings = rr_rr + 0.25f * Rr_Rr + 0.5f * Rr_rr;
-	auto const p_dominant = 1 - recessive_pairings / total_pairings;
+	auto const recessive_offsprings = rr_rr + 0.25f * Rr_Rr + 0.5f * Rr_rr;
+	auto const p_dominant = 1 - recessive_offsprings / total_pairings;
 
 	open("result.txt").print(p_dominant);
 }
