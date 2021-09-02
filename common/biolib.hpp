@@ -125,7 +125,7 @@ namespace bio
 		return std::inner_product
 		(
 			begin(xs), begin(xs) + size, begin(ys),
-			0, std::plus<int>(), std::not_equal_to<int>()
+			0, std::plus<int>(), std::not_equal_to<>()
 		);
 	}
 
