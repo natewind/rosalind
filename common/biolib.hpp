@@ -11,6 +11,8 @@
 #include <functional>    // std::plus, std::not_equal_to
 #include <unordered_map> // std::unordered_map
 
+#include "../cleario/main.hpp"
+
 // TODO: Rewrite in Haskell or Rust
 
 namespace bio
@@ -152,6 +154,12 @@ namespace bio
 	};
 }
 
+template <>
+inline void clear::fstream::write(bio::RNA const &rna) { write(rna.data); }
+
+template <>
+inline void clear::fstream::write(bio::DNA const &dna) { write(dna.data); }
+
 auto operator>>(std::istream &src, bio::DNA &dna) -> std::istream&
 {
 	return src >> dna.data;
@@ -160,16 +168,6 @@ auto operator>>(std::istream &src, bio::DNA &dna) -> std::istream&
 auto operator>>(std::istream &src, bio::RNA &rna) -> std::istream&
 {
 	return src >> rna.data;
-}
-
-auto operator<<(std::ostream &dest, bio::DNA const &dna) -> std::ostream&
-{
-	return dest << dna.data;
-}
-
-auto operator<<(std::ostream &dest, bio::RNA const &rna) -> std::ostream&
-{
-	return dest << rna.data;
 }
 
 auto operator>>(std::istream &src, bio::FASTA &fasta) -> std::istream&
