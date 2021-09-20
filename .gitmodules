@@ -1,0 +1,3 @@
+[submodule "cleario"]
+	path = cleario
+	url = https://github.com/natewind/cleario
