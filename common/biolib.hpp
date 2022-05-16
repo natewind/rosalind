@@ -1,15 +1,15 @@
 #ifndef BIOLIB_HPP
 #define BIOLIB_HPP
 
-#include <tuple>         // std::tuple, std::get
-#include <string>        // std::string, std::getline
-#include <istream>       // std::istream, std::ostream
-#include <utility>       // std::move
-#include <numeric>       // std::accumulate
-#include <iterator>      // std::back_inserter
 #include <algorithm>     // std::replace, std::count_if, std::min
 #include <functional>    // std::plus, std::not_equal_to
+#include <istream>       // std::istream, std::ostream
+#include <iterator>      // std::back_inserter
+#include <numeric>       // std::accumulate
+#include <string>        // std::string, std::getline
+#include <tuple>         // std::tuple, std::get
 #include <unordered_map> // std::unordered_map
+#include <utility>       // std::move
 
 #include "../cleario/main.hpp"
 
@@ -133,7 +133,7 @@ namespace bio
 
 	constexpr auto binomial2(int n) -> int { return n * (n - 1) / 2; }
 
-	inline auto const codon_table = std::unordered_map<char const*, char>
+	inline auto const codon_table = std::unordered_map<std::string_view, char>
 	{
 		{"UUU", 'F'}, {"CUU", 'L'}, {"AUU", 'I'}, {"GUU", 'V'},
 		{"UUC", 'F'}, {"CUC", 'L'}, {"AUC", 'I'}, {"GUC", 'V'},
