@@ -155,10 +155,10 @@ namespace bio
 }
 
 template <>
-inline void clear::fstream::write(bio::RNA const &rna) { write(rna.data); }
+inline void clear::io::write(bio::RNA const &rna) { write(rna.data); }
 
 template <>
-inline void clear::fstream::write(bio::DNA const &dna) { write(dna.data); }
+inline void clear::io::write(bio::DNA const &dna) { write(dna.data); }
 
 auto operator>>(std::istream &src, bio::DNA &dna) -> std::istream&
 {
