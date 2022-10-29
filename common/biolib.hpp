@@ -11,9 +11,9 @@
 #include <unordered_map> // std::unordered_map
 #include <utility>       // std::move
 
-#include "../cleario/main.hpp"
+#include "../cleario/include.hpp"
 
-// TODO: Rewrite in Haskell or Rust
+// TODO: Rewrite in Haskell or Rust?
 
 namespace bio
 {
