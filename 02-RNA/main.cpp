@@ -1,6 +1,6 @@
 // Transcribing DNA into RNA
 
-#include "../cleario/main.hpp"
+#include "../cleario/include.hpp"
 #include "../common/file.hpp"
 #include "../common/biolib.hpp"
 
