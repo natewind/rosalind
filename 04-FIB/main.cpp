@@ -8,5 +8,5 @@ auto main() -> int
 	using clear::open;
 
 	auto const [months, pairs] = open("rosalind_fib.txt").read<int, int>();
-	open("result.txt").print(bio::LucasSequence{1, -pairs}[months]);
+	open("result.txt").println(bio::LucasSequence{1, -pairs}[months]);
 }

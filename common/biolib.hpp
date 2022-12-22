@@ -191,6 +191,8 @@ auto operator>>(std::istream &src, bio::FASTA &fasta) -> std::istream&
 
 auto operator<<(std::ostream &dest, bio::Percent const &pct) -> std::ostream&
 {
+	// TODO: Figure out why iostream and cleario
+	//       print floats with different precision by default
 	return dest << pct.value;
 }
 

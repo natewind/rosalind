@@ -10,5 +10,5 @@ auto main() -> int
 {
 	auto dna = open("rosalind_rna.txt").read<bio::DNA>();
 	auto const rna = transcribe(std::move(dna));
-	clear::open("result.txt").print(rna);
+	clear::open("result.txt").println(rna);
 }

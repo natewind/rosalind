@@ -7,5 +7,5 @@
 auto main() -> int
 {
 	auto const dna = open("rosalind_revc.txt").read<bio::DNA>();
-	clear::open("result.txt").print(reverse_complement(dna));
+	clear::open("result.txt").println(reverse_complement(dna));
 }
