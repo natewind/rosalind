@@ -1,4 +1,4 @@
-# [Rosalind](http://rosalind.info/)
+# [Rosalind](http://rosalind.info/) Problems
 
 ## Bioinformatics Stronghold
 
