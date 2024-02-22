@@ -1,11 +1,12 @@
 // Mendel’s First Law
 
+#include "../cleario/include.hpp"
 #include "../common/file.hpp"
 #include "../common/biolib.hpp"
 
 auto main() -> int
 {
-	auto const [RR, Rr, rr] = open("rosalind_iprb.txt").read<int, int, int>();
+	auto const [RR, Rr, rr] = clear::open("rosalind_iprb.txt").read<int, int, int>();
 
 	auto const population = RR + Rr + rr;
 	auto const total_pairings = bio::binomial2(population);
