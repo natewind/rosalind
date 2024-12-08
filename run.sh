@@ -36,7 +36,7 @@ params="$dialect $optimizations $errors"
 
 if [[ $# -ne 1 ]]; then
 	error "Wrong number of arguments!"
-	return 1
+	exit 1
 fi
 
 target="$1"
